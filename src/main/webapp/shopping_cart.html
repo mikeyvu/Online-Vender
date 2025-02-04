@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <link rel="stylesheet" href="assets/css/cart.css">
+</head>
+<body>
+  <h1>Your Shopping Cart</h1>
+  
+  <div id="cart-items"></div>
+  <h2 id="total-cost"></h2>
+
+  <div id="'payment-div">
+    <a href="index.html"><button id="add-items-button">Add more items</button></a>
+    <a href="payment.html"><button id="payment-button">Proceed to Payment</button></a>
+  </div>
+  
+
+  <script>
+    let cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
+    const cartItemsContainer = document.getElementById('cart-items');
+    const totalCostElement = document.getElementById('total-cost');
+
+    function displayCart() {
+      cartItemsContainer.innerHTML = '';
+      let totalOrderCost = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p>Your cart is empty.</p>';
+        totalCostElement.innerHTML = '';
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        const itemTotalCost = parseFloat(item.price.replace('$', '')) * item.quantity;
+        totalOrderCost += itemTotalCost;
+
+        cartItemsContainer.innerHTML += `
+          <div class="cart-item">
+            <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+            <div class="cart-item-details">
+              <h3>${item.name}</h3>
+              <p><strong>Price:</strong> ${item.price}</p>
+              <label for="quantity-${index}"><strong>Quantity:</strong></label>
+              <input type="number" id="quantity-${index}" value="${item.quantity}" min="1" onchange="updateQuantity(${index}, this.value)">
+              <br>
+              <label for="note-${index}"><strong>Note:</strong></label>
+              <textarea id="note-${index}" rows="2" onchange="updateNote(${index}, this.value)">${item.note}</textarea>
+              <p><strong>Total Cost:</strong> $${itemTotalCost.toFixed(2)}</p>
+              <button onclick="removeItem(${index})">Remove</button>
+            </div>
+          </div>
+          <hr>
+        `;
+      });
+
+      totalCostElement.innerHTML = `<strong>Total Order Cost:</strong> $${totalOrderCost.toFixed(2)}`;
+    }
+
+    function updateQuantity(index, newQuantity) {
+      cart[index].quantity = parseInt(newQuantity);
+      localStorage.setItem('shoppingCart', JSON.stringify(cart));
+      displayCart();
+    }
+
+    function updateNote(index, newNote) {
+      cart[index].note = newNote;
+      localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    }
+
+    function removeItem(index) {
+      if (confirm('Are you sure you want to remove this item?')) {
+        cart.splice(index, 1);
+        localStorage.setItem('shoppingCart', JSON.stringify(cart));
+        displayCart();
+      }
+    }
+
+    displayCart();
+  </script>
+</body>
+</html>
