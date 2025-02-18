@@ -8,7 +8,7 @@
 		<meta charset="UTF-8">
 		<title>Yummy Admin</title>
 		
-		<link rel="stylesheet" href="assets/css/admin.css">
+		<link rel="stylesheet" href="<%= request.getContextPath() %>/assets/css/admin.css">
 	</head>
 	
 	<body>
@@ -16,11 +16,12 @@
 		<div class="menu text-center">
 			<div class="wrapper">
 				<ul>
-					<li><a href="index.jsp">Home</a></li>
-					<li><a href="manage-admin.jsp">Admin</a></li>
+					<li><a href="restaurant/index.jsp">Home</a></li>
+					<li><a href="<%= request.getContextPath() %>/manage_admin">Admin</a></li>
 					<li><a href="manage-category.jsp">Category</a></li>
 					<li><a href="manage-food.jsp">Food</a></li>
 					<li><a href="manage-order.jsp">Order</a></li>
+					<li><a href="authenticationServlet?action=LOGOUT">Logout</a></li>
 				</ul>
 			</div>
 		</div>

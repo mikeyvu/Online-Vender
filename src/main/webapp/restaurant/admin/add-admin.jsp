@@ -1,4 +1,4 @@
-<jsp:include page="partials/menu.jsp" />
+<jsp:include page="/restaurant/partials/menu.jsp" />
 
 <div class="main-content">
     <div class="wrapper">
@@ -40,7 +40,7 @@
     </div>
 </div>
 
-<jsp:include page="partials/footer.jsp" />
+<jsp:include page="/restaurant/partials/footer.jsp" />
 
 
 
