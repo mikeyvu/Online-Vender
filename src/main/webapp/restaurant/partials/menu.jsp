@@ -18,8 +18,8 @@
 				<ul>
 					<li><a href="restaurant/index.jsp">Home</a></li>
 					<li><a href="<%= request.getContextPath() %>/manage_admin">Admin</a></li>
-					<li><a href="manage-category.jsp">Category</a></li>
-					<li><a href="manage-food.jsp">Food</a></li>
+					<li><a href="<%= request.getContextPath() %>/manageCategoryServlet">Category</a></li>
+					<li><a href="<%= request.getContextPath() %>/manageFoodServlet">Food</a></li>
 					<li><a href="manage-order.jsp">Order</a></li>
 					<li><a href="authenticationServlet?action=LOGOUT">Logout</a></li>
 				</ul>

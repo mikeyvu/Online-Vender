@@ -1,4 +1,4 @@
-package restaurantServlet;
+package restaurantServlet.admin;
 
 import java.io.IOException;
 
