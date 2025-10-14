@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Admin Panel</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .tab-content {
+      margin-top: 20px;
+    }
+
+    .menu-item {
+      margin-bottom: 10px;
+    }
+
+    #addItemModal .modal-body {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container my-4">
+    <h1 class="text-center">Restaurant Admin Panel</h1>
+    <ul class="nav nav-tabs mt-4" id="adminTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">Dashboard</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="menu-tab" data-bs-toggle="tab" data-bs-target="#menu" type="button" role="tab" aria-controls="menu" aria-selected="false">Menu</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="revenue-tab" data-bs-toggle="tab" data-bs-target="#revenue" type="button" role="tab" aria-controls="revenue" aria-selected="false">Revenue</button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="adminTabsContent">
+      <!-- Dashboard Tab -->
+      <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+        <h3>Dashboard</h3>
+        <p>Welcome to the restaurant admin dashboard! Here you can view key metrics about your restaurant's performance.</p>
+      </div>
+
+      <!-- Menu Tab -->
+      <div class="tab-pane fade" id="menu" role="tabpanel" aria-labelledby="menu-tab">
+        <h3>Manage Menu</h3>
+        <div id="menu-list" class="my-4">
+          <!-- Menu Items will be dynamically added here -->
+        </div>
+        <button id="openAddItemModal" class="btn btn-success">Add New Item</button>
+      </div>
+
+      <!-- Revenue Tab -->
+      <div class="tab-pane fade" id="revenue" role="tabpanel" aria-labelledby="revenue-tab">
+        <h3>Revenue</h3>
+        <p>Here you can see your restaurant's revenue data and insights.</p>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Total Orders</th>
+              <th>Total Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2024-12-28</td>
+              <td>150</td>
+              <td>$2,500</td>
+            </tr>
+            <tr>
+              <td>2024-12-27</td>
+              <td>120</td>
+              <td>$2,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Adding New Item -->
+  <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addItemModalLabel">Add New Menu Item</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="itemName" class="form-control" placeholder="Item Name">
+          <input type="text" id="itemDescription" class="form-control" placeholder="Description">
+          <input type="text" id="itemPrice" class="form-control" placeholder="Price">
+          <input type="file" id="itemImage" class="form-control">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" id="finishAdding" class="btn btn-primary">Finish Adding</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const menuList = document.getElementById("menu-list");
+      const openAddItemModal = document.getElementById("openAddItemModal");
+      const finishAdding = document.getElementById("finishAdding");
+      const itemNameInput = document.getElementById("itemName");
+      const itemDescriptionInput = document.getElementById("itemDescription");
+      const itemPriceInput = document.getElementById("itemPrice");
+      const itemImageInput = document.getElementById("itemImage");
+
+      openAddItemModal.addEventListener("click", () => {
+        const addItemModal = new bootstrap.Modal(document.getElementById("addItemModal"));
+        addItemModal.show();
+      });
+
+      finishAdding.addEventListener("click", () => {
+        const itemName = itemNameInput.value;
+        const itemDescription = itemDescriptionInput.value;
+        const itemPrice = itemPriceInput.value;
+        const itemImage = itemImageInput.files[0];
+
+        if (itemName && itemDescription && itemPrice && itemImage) {
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            const newItem = document.createElement("div");
+            newItem.className = "menu-item row align-items-center";
+            newItem.innerHTML = `
+              <div class="col-md-2">
+                <img src="${e.target.result}" alt="${itemName}" class="img-fluid rounded">
+              </div>
+              <div class="col-md-3">${itemName}</div>
+              <div class="col-md-4">${itemDescription}</div>
+              <div class="col-md-2">$${itemPrice}</div>
+              <div class="col-md-1">
+                <button class="btn btn-danger remove-btn">Remove</button>
+              </div>
+            `;
+
+            menuList.appendChild(newItem);
+
+            newItem.querySelector(".remove-btn").addEventListener("click", () => {
+              menuList.removeChild(newItem);
+            });
+          };
+
+          reader.readAsDataURL(itemImage);
+
+          // Clear modal inputs
+          itemNameInput.value = "";
+          itemDescriptionInput.value = "";
+          itemPriceInput.value = "";
+          itemImageInput.value = "";
+
+          // Close the modal
+          const addItemModal = bootstrap.Modal.getInstance(document.getElementById("addItemModal"));
+          addItemModal.hide();
+        } else {
+          alert("Please fill out all fields and upload an image.");
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

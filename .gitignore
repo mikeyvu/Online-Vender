@@ -1,0 +1,58 @@
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.project
+.classpath
+.settings/
+.vscode/
+*.iml
+.idea/
+
+# Eclipse WTP
+.metadata/
+Servers/
+**/wtpwebapps/
+**/work/
+**/logs/
+
+# Eclipse workspace (should not be in project)
+.metadata/
+
+# Build outputs
+build/
+target/
+out/
+bin/
+dist/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.log
+
+# Dependencies
+node_modules/
+lib/
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Database
+*.db
+*.sqlite
+
+# Application specific
+uploads/
+temp/
+
