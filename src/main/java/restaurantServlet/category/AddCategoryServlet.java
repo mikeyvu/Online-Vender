@@ -1,28 +1,34 @@
-package restaurantServlet.admin;
+package restaurantServlet.category;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Paths;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
-import dao.AdminDAO;
-import entity.Admin;
+import dao.CategoryDAO;
+import entity.Category;
 
 /**
- * Servlet implementation class update_admin
+ * Servlet implementation class addCategoryServlet
  */
-@WebServlet("/update_admin")
-public class update_admin extends HttpServlet {
+@MultipartConfig
+public class AddCategoryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public update_admin() {
+    public AddCategoryServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,14 +37,7 @@ public class update_admin extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("id");
-		
-		AdminDAO adminDAO = new AdminDAO();
-		Admin admin = adminDAO.getAdminByID(Integer.parseInt(id));
-		
-		request.setAttribute("adminUpdate", admin);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("/restaurant/admin/update-admin.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("restaurant/category/add-category.jsp");
 		rd.forward(request, response);
 	}
 
@@ -46,17 +45,17 @@ public class update_admin extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		AdminDAO adminDAO = new AdminDAO();
-		
 		if (request.getParameter("submit") != null) {
-			String full_name = request.getParameter("full_name");
-	        String username = request.getParameter("username");
-	        int id = Integer.parseInt(request.getParameter("id"));
-	        
-	        adminDAO.updateAdmin(id, full_name, username);
-	        
-	        response.sendRedirect(request.getContextPath() + "/manage_admin?message=Admin Updated Successfully");
+			String title = request.getParameter("title");
+			String featured = request.getParameter("featured");
+			String active = request.getParameter("active");
+			
+			Category category = new Category(title, featured, active);
+			
+			CategoryDAO dao = CategoryDAO.getInstance();
+			dao.addCategory(category);
+			
+			response.sendRedirect(request.getContextPath() + "/manageCategoryServlet");
 		}
 	}
-
 }

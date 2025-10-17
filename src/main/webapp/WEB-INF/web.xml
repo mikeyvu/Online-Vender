@@ -6,12 +6,89 @@
 		version="4.0"
 		metadata-complete="false">
   <display-name>online-vender</display-name>
+  
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
+  <servlet>
+    <servlet-name>HomeServlet</servlet-name>
+    <servlet-class>clientServlet.home.HomeServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>HomeServlet</servlet-name>
+	    <url-pattern>/home</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>OrderServlet</servlet-name>
+    <servlet-class>clientServlet.order.OrderServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>OrderServlet</servlet-name>
+	    <url-pattern>/client/order</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>AddAdminServlet</servlet-name>
+    <servlet-class>restaurantServlet.admin.AddAdminServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>AddAdminServlet</servlet-name>
+	    <url-pattern>/restaurant/admin/add-admin</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ManageAdminServlet</servlet-name>
+    <servlet-class>restaurantServlet.admin.ManageAdminServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>ManageAdminServlet</servlet-name>
+	    <url-pattern>/restaurant/admin/manage-admin</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>UpdateAdminServlet</servlet-name>
+    <servlet-class>restaurantServlet.admin.UpdateAdminServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>UpdateAdminServlet</servlet-name>
+	    <url-pattern>/restaurant/admin/update-admin</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>UpdatePasswordServlet</servlet-name>
+    <servlet-class>restaurantServlet.admin.UpdatePasswordServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>UpdatePasswordServlet</servlet-name>
+	    <url-pattern>/restaurant/admin/update-password</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>AuthenticationServlet</servlet-name>
+    <servlet-class>restaurantServlet.admin.AuthenticationServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>AuthenticationServlet</servlet-name>
+	    <url-pattern>/restaurant/admin/authentication</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>AddCategoryServlet</servlet-name>
+    <servlet-class>restaurantServlet.category.AddCategoryServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>AddCategoryServlet</servlet-name>
+	    <url-pattern>/restaurant/add-category</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>ManageFoodServlet</servlet-name>
+    <servlet-class>restaurantServlet.food.ManageFoodServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>ManageFoodServlet</servlet-name>
+	    <url-pattern>/restaurant/food/manage-food</url-pattern>  <!-- Maps to root URL -->
+  </servlet-mapping>
 </web-app>

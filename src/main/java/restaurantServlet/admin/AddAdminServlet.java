@@ -1,35 +1,27 @@
-package restaurantServlet.category;
+package restaurantServlet.admin;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Paths;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
-import dao.CategoryDAO;
-import entity.Category;
+import dao.AdminDAO;
+import entity.Admin;
 
 /**
- * Servlet implementation class addCategoryServlet
+ * Servlet implementation class add_admin
  */
-@WebServlet("/addCategoryServlet")
-@MultipartConfig
-public class addCategoryServlet extends HttpServlet {
+public class AddAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public addCategoryServlet() {
+    public AddAdminServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -38,7 +30,7 @@ public class addCategoryServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("restaurant/category/add-category.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("restaurant/admin/add-admin.jsp");
 		rd.forward(request, response);
 	}
 
@@ -47,16 +39,22 @@ public class addCategoryServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getParameter("submit") != null) {
-			String title = request.getParameter("title");
-			String featured = request.getParameter("featured");
-			String active = request.getParameter("active");
+			//Button Clicked
 			
-			Category category = new Category(title, featured, active);
-			
-			CategoryDAO dao = CategoryDAO.getInstance();
-			dao.addCategory(category);
-			
-			response.sendRedirect(request.getContextPath() + "/manageCategoryServlet");
+	        //Get the data from form
+	        String full_name = request.getParameter("full_name");
+	        String username = request.getParameter("username");
+	        String password = request.getParameter("password");
+	        
+	        // SQL Query to Save the data into database
+	        Admin admin = new Admin(full_name, username, password);
+	        AdminDAO adminDAO = new AdminDAO();
+	        adminDAO.addAdmin(admin);
+	        
+	        response.sendRedirect(request.getContextPath() + "/manage_admin");
+		} else {
+			response.sendRedirect(request.getContextPath() + "/add-admin.jsp");
 		}
 	}
+
 }

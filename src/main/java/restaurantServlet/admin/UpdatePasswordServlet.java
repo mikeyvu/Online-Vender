@@ -15,14 +15,13 @@ import entity.Admin;
 /**
  * Servlet implementation class update_password
  */
-@WebServlet("/update_password")
-public class update_password extends HttpServlet {
+public class UpdatePasswordServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public update_password() {
+    public UpdatePasswordServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

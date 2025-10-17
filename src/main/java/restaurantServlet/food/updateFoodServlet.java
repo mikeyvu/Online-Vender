@@ -2,6 +2,10 @@ package restaurantServlet.food;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -73,10 +77,15 @@ public class updateFoodServlet extends HttpServlet {
 	        Part filePart = request.getPart("image");
 			String originalFileName = filePart.getSubmittedFileName();
 			
-			//Define upload directory path
-			String uploadPath = "C:/Users/minhv/"
-					+ "OneDrive - University of Wollongong/Documents/Backend Intensive/0 - "
-					+ "Online Vender/src/main/webapp/assets/img/food/";
+			// Get the servlet context path and build the project path dynamically
+			String contextPath = getServletContext().getRealPath("/");
+			String uploadPath = contextPath + "assets\\img\\food";
+			
+			// Ensure the directory exists
+			File uploadDir = new File(uploadPath);
+			if (!uploadDir.exists()) {
+				uploadDir.mkdirs();
+			}
 			
 			String newImage = null;
 			
@@ -94,9 +103,18 @@ public class updateFoodServlet extends HttpServlet {
                     System.out.println("Failed to delete old image: " + currentImage);
                 }
 	            
-	            // Save new image file
-	            File newFile = new File(uploadPath + newImage);
-	            filePart.write(newFile.getAbsolutePath());
+	            // Full path for updating the file
+	            String filePath = uploadPath + "\\" + newImage;
+	            System.out.println("Updating file's path: " + filePath);
+	            
+	            //copy the uploaded file to the source project's asset folder
+				try(InputStream inputStream = filePart.getInputStream()) {
+					Files.copy(inputStream, Paths.get(filePath), StandardCopyOption.REPLACE_EXISTING);
+				}
+				catch(IOException e) {
+					e.printStackTrace();
+					System.out.println("Error updating file to asset folder: " + e.getMessage());
+				}
 	            System.out.println("Saved new image: " + newImage);
 			} else {
 				//If there is no new image upload, keep the old image

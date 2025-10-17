@@ -13,16 +13,15 @@ import dao.AdminDAO;
 import entity.Admin;
 
 /**
- * Servlet implementation class add_admin
+ * Servlet implementation class update_admin
  */
-@WebServlet("/add_admin")
-public class add_admin extends HttpServlet {
+public class UpdateAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public add_admin() {
+    public UpdateAdminServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,7 +30,14 @@ public class add_admin extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("restaurant/admin/add-admin.jsp");
+		String id = request.getParameter("id");
+		
+		AdminDAO adminDAO = new AdminDAO();
+		Admin admin = adminDAO.getAdminByID(Integer.parseInt(id));
+		
+		request.setAttribute("adminUpdate", admin);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/restaurant/admin/update-admin.jsp");
 		rd.forward(request, response);
 	}
 
@@ -39,22 +45,16 @@ public class add_admin extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		AdminDAO adminDAO = new AdminDAO();
+		
 		if (request.getParameter("submit") != null) {
-			//Button Clicked
-			
-	        //Get the data from form
-	        String full_name = request.getParameter("full_name");
+			String full_name = request.getParameter("full_name");
 	        String username = request.getParameter("username");
-	        String password = request.getParameter("password");
+	        int id = Integer.parseInt(request.getParameter("id"));
 	        
-	        // SQL Query to Save the data into database
-	        Admin admin = new Admin(full_name, username, password);
-	        AdminDAO adminDAO = new AdminDAO();
-	        adminDAO.addAdmin(admin);
+	        adminDAO.updateAdmin(id, full_name, username);
 	        
-	        response.sendRedirect(request.getContextPath() + "/manage_admin");
-		} else {
-			response.sendRedirect(request.getContextPath() + "/add-admin.jsp");
+	        response.sendRedirect(request.getContextPath() + "/manage_admin?message=Admin Updated Successfully");
 		}
 	}
 

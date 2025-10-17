@@ -3,7 +3,7 @@
 <%
 // If no menuItems are set, redirect to HomeServlet
 if (request.getAttribute("menuItems") == null) {
-    response.sendRedirect(request.getContextPath() + "/HomeServlet");
+    response.sendRedirect(request.getContextPath() + "/home");
     return;
 }
 %>

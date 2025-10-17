@@ -36,7 +36,7 @@
                 <tr>
                     <td>Current Image: </td>
                     <td>
-                        <img alt="Current Image" src="/assets/img/food/${foodUpdate.imageName }" width=150px>
+                        <img src="<%= request.getContextPath() %>/assets/img/food/${foodUpdate.imageName}" alt="Current Image" width="100px">
                     </td>
                 </tr>
 

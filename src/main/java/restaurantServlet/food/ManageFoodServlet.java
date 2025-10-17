@@ -19,14 +19,13 @@ import entity.Food;
 /**
  * Servlet implementation class manageFoodServlet
  */
-@WebServlet("/manageFoodServlet")
-public class manageFoodServlet extends HttpServlet {
+public class ManageFoodServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public manageFoodServlet() {
+    public ManageFoodServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -62,19 +61,22 @@ public class manageFoodServlet extends HttpServlet {
 		FoodDAO foodDAO = FoodDAO.getInstance();
 		
 		String imageName = request.getParameter("image_name");
-		String imagePath = "C:/Users/minhv/OneDrive - University of Wollongong/Documents/Backend Intensive/0 - Online Vender/src/main/webapp/assets/img/food/" + imageName;
-		File file = new File(imagePath);
+		String contextPath = getServletContext().getRealPath("/");
+		String uploadPath = contextPath + "assets\\img\\food";
+		String filePath = uploadPath + "\\" + imageName;
+		
+		File file = new File(filePath);
 		if (file.exists() && file.delete()) {
-		    System.out.println("File deleted successfully: " + imagePath);
+		    System.out.println("File deleted successfully: " + filePath);
 		} else {
-		    System.out.println("Failed to delete file: " + imagePath);
+		    System.out.println("Failed to delete file: " + filePath);
 		}
 		
 		
 		String IDdelete = request.getParameter("id");
 		foodDAO.deleteFood(IDdelete);
 		
-		response.sendRedirect(request.getContextPath() + "/manageFoodServlet?message=Admin Deleted Successfully");
+		response.sendRedirect(request.getContextPath() + "/manageFoodServlet?message=Food Deleted Successfully");
 	}
 
 	/**

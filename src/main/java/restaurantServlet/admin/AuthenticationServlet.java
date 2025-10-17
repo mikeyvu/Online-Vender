@@ -16,14 +16,13 @@ import entity.Admin;
 /**
  * Servlet implementation class login
  */
-@WebServlet("/authenticationServlet")
-public class authenticationServlet extends HttpServlet {
+public class AuthenticationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public authenticationServlet() {
+    public AuthenticationServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

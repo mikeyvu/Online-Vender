@@ -17,14 +17,13 @@ import entity.Admin;
 /**
  * Servlet implementation class manage_admin
  */
-@WebServlet("/manage_admin")
-public class manage_admin extends HttpServlet {
+public class ManageAdminServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public manage_admin() {
+    public ManageAdminServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
