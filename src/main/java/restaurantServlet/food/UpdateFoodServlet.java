@@ -25,15 +25,14 @@ import entity.Food;
 /**
  * Servlet implementation class updateFoodServlet
  */
-@WebServlet("/updateFoodServlet")
 @MultipartConfig
-public class updateFoodServlet extends HttpServlet {
+public class UpdateFoodServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public updateFoodServlet() {
+    public UpdateFoodServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -123,7 +122,7 @@ public class updateFoodServlet extends HttpServlet {
 			
 	        foodDAO.updateFood(id, title, description, price, newImage, categoryID, featured, active);
 	        
-	        response.sendRedirect(request.getContextPath() + "/manageFoodServlet?message=Food Updated Successfully");
+	        response.sendRedirect(request.getContextPath() + "/restaurant/food/manage-food?message=Food Updated Successfully");
 		}
 	}
 }

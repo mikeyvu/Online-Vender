@@ -25,15 +25,14 @@ import entity.Food;
 /**
  * Servlet implementation class addFoodServlet
  */
-@WebServlet("/addFoodServlet")
 @MultipartConfig
-public class addFoodServlet extends HttpServlet {
+public class AddFoodServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public addFoodServlet() {
+    public AddFoodServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -47,7 +46,7 @@ public class addFoodServlet extends HttpServlet {
 		
 		request.setAttribute("categories", categories);
 		
-		RequestDispatcher rd = request.getRequestDispatcher("restaurant/food/add-food.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/restaurant/food/add-food.jsp");
 		rd.forward(request, response);
 	}
 
@@ -94,7 +93,7 @@ public class addFoodServlet extends HttpServlet {
 			
 			FoodDAO foodDAO = FoodDAO.getInstance();
 			foodDAO.addFood(new Food(title, description, price, newFileName, categoryID, featured, active));
-			response.sendRedirect(request.getContextPath() + "/manageFoodServlet?message=Food Added Successfully");
+			response.sendRedirect(request.getContextPath() + "/restaurant/food/manage-food?message=Food Added Successfully");
 		}
 	}
 

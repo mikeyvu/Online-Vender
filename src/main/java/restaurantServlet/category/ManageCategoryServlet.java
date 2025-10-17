@@ -19,14 +19,13 @@ import entity.Category;
 /**
  * Servlet implementation class manageCategoryServlet
  */
-@WebServlet("/manageCategoryServlet")
-public class manageCategoryServlet extends HttpServlet {
+public class ManageCategoryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public manageCategoryServlet() {
+    public ManageCategoryServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -64,7 +63,7 @@ public class manageCategoryServlet extends HttpServlet {
 		int IDdelete = Integer.parseInt(request.getParameter("id"));
 		categoryDAO.deleteCategory(IDdelete);
 		
-		response.sendRedirect(request.getContextPath() + "/manageCategoryServlet?message=Admin Deleted Successfully");
+		response.sendRedirect(request.getContextPath() + "/restaurant/category/manage-category?message=Category Deleted Successfully");
 	}
 	
 	

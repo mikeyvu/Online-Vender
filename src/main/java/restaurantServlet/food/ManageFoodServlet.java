@@ -76,7 +76,7 @@ public class ManageFoodServlet extends HttpServlet {
 		String IDdelete = request.getParameter("id");
 		foodDAO.deleteFood(IDdelete);
 		
-		response.sendRedirect(request.getContextPath() + "/manageFoodServlet?message=Food Deleted Successfully");
+		response.sendRedirect(request.getContextPath() + "/restaurant/food/manage-food?message=Food Deleted Successfully");
 	}
 
 	/**

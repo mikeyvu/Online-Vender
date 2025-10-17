@@ -56,22 +56,22 @@ public class UpdatePasswordServlet extends HttpServlet {
 			if (!currentPassword.equals(admin.getPassword())) {
 				System.out.println("current password: " + currentPassword);
 				System.out.println(admin.getPassword());
-				response.sendRedirect(request.getContextPath() + "/manage_admin?result=WRONGCURRENT");
+				response.sendRedirect(request.getContextPath() + "/restaurant/admin/manage-admin?result=WRONGCURRENT");
 				return;
 			}
 	        
 			String newPassword = request.getParameter("new_password");
 			if (newPassword.equals(currentPassword)) {
-				response.sendRedirect(request.getContextPath() + "/manage_admin?result=SAMEPASSWORD");
+				response.sendRedirect(request.getContextPath() + "/restaurant/admin/manage-admin?result=SAMEPASSWORD");
 				return;
 			}
 			
 			String confirmPassword = request.getParameter("confirm_password");
 			if (confirmPassword.equals(newPassword)) {
-				response.sendRedirect(request.getContextPath() + "/manage_admin?result=PASSWORDCHANGED");
+				response.sendRedirect(request.getContextPath() + "/restaurant/admin/manage-admin?result=PASSWORDCHANGED");
 				adminDAO.updatePassword(Integer.parseInt(id), confirmPassword);
 			} else {
-				response.sendRedirect(request.getContextPath() + "/manage_admin?result=WRONGCONFIRM");
+				response.sendRedirect(request.getContextPath() + "/restaurant/admin/manage-admin?result=WRONGCONFIRM");
 			}
 		}
 	}

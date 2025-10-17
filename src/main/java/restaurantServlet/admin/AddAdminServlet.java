@@ -30,7 +30,7 @@ public class AddAdminServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("restaurant/admin/add-admin.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/restaurant/admin/add-admin.jsp");
 		rd.forward(request, response);
 	}
 
@@ -51,9 +51,9 @@ public class AddAdminServlet extends HttpServlet {
 	        AdminDAO adminDAO = new AdminDAO();
 	        adminDAO.addAdmin(admin);
 	        
-	        response.sendRedirect(request.getContextPath() + "/manage_admin");
+		response.sendRedirect(request.getContextPath() + "/restaurant/admin/manage-admin");
 		} else {
-			response.sendRedirect(request.getContextPath() + "/add-admin.jsp");
+			response.sendRedirect(request.getContextPath() + "/restaurant/admin/add-admin");
 		}
 	}
 

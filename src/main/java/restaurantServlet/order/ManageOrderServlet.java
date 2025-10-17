@@ -16,8 +16,7 @@ import restaurantServlet.order.OrderNotificationServlet;
 /**
  * Servlet implementation class manageOrderServlet
  */
-@WebServlet("/manageOrderServlet")
-public class manageOrderServlet extends HttpServlet {
+public class ManageOrderServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	private OrderDAO orderDAO;
@@ -25,7 +24,7 @@ public class manageOrderServlet extends HttpServlet {
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public manageOrderServlet() {
+    public ManageOrderServlet() {
         super();
         orderDAO = new OrderDAO();
     }

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import entity.Order;
 import dao.OrderDAO;
 
-@WebServlet("/OrderNotificationServlet")
 public class OrderNotificationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     

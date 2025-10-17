@@ -6,7 +6,7 @@
         <h1>Update Food</h1>
         <br><br>
 
-        <form action="<%= request.getContextPath() %>/updateFoodServlet" 
+        <form action="<%= request.getContextPath() %>/restaurant/food/update-food" 
         		method="POST" 
         		enctype="multipart/form-data"
         		onsubmit="return validateForm()">

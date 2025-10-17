@@ -30,15 +30,15 @@
 <body>
     <header id="header" class="header d-flex align-items-center sticky-top">
         <div class="container position-relative d-flex align-items-center justify-content-between">
-            <a href="<%=request.getContextPath()%>/HomeServlet" class="logo d-flex align-items-center me-auto me-xl-0">
+            <a href="<%=request.getContextPath()%>/home" class="logo d-flex align-items-center me-auto me-xl-0">
                 <h1 class="sitename">Yummy</h1>
                 <span>.</span>
             </a>
             
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <li><a href="<%=request.getContextPath()%>/HomeServlet">Home</a></li>
-                    <li><a href="<%=request.getContextPath()%>/HomeServlet#menu">Menu</a></li>
+                    <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
+                    <li><a href="<%=request.getContextPath()%>/home#menu">Menu</a></li>
                 </ul>
             </nav>
         </div>
@@ -60,7 +60,7 @@
             </div>
             
             <div class="cart-actions">
-                <button id="add-items-button" onclick="window.location.href='<%=request.getContextPath()%>/HomeServlet'">
+                <button id="add-items-button" onclick="window.location.href='<%=request.getContextPath()%>/home'">
                     <i class="bi bi-arrow-left"></i> Add More Items
                 </button>
                 <button id="order-button" onclick="window.location.href='order-summary.jsp'">

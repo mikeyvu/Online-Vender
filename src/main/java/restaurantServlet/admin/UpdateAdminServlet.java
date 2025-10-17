@@ -54,7 +54,7 @@ public class UpdateAdminServlet extends HttpServlet {
 	        
 	        adminDAO.updateAdmin(id, full_name, username);
 	        
-	        response.sendRedirect(request.getContextPath() + "/manage_admin?message=Admin Updated Successfully");
+		response.sendRedirect(request.getContextPath() + "/restaurant/admin/manage-admin?message=Admin Updated Successfully");
 		}
 	}
 

@@ -10,7 +10,7 @@
 		<br>
 
 		<!-- Button to Add Category -->
-		<a href="<%=request.getContextPath()%>/addCategoryServlet"
+		<a href="<%=request.getContextPath()%>/restaurant/category/add-category"
 			class="btn-primary">Add Category</a> <br>
 		<br>
 		<br>
@@ -32,8 +32,8 @@
 					<td>${c.featured}</td>
 					<td>${c.active}</td>
 					<td>
-						<a href="<%= request.getContextPath() %>/updateCategoryServlet?id=${c.id }" class="btn-secondary">Update Category</a> 
-						<a href="<%= request.getContextPath() %>/manageCategoryServlet?action=DELETE&id=${c.id}" class="btn-danger">Delete Category</a>
+						<a href="<%= request.getContextPath() %>/restaurant/category/update-category?id=${c.id }" class="btn-secondary">Update Category</a> 
+						<a href="<%= request.getContextPath() %>/restaurant/category/manage-category?action=DELETE&id=${c.id}" class="btn-danger">Delete Category</a>
 					</td>
 				</tr>
 				<c:set var="sn" value="${sn + 1}" />

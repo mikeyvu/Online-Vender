@@ -16,13 +16,13 @@
 		<div class="menu text-center">
 			<div class="wrapper">
 				<ul>
-					<li><a href="<%= request.getContextPath() %>/dashboardServlet">Home</a></li>
-					<li><a href="<%= request.getContextPath() %>/manage_admin">Admin</a></li>
-					<li><a href="<%= request.getContextPath() %>/manageCategoryServlet">Category</a></li>
-					<li><a href="<%= request.getContextPath() %>/manageFoodServlet">Food</a></li>
-					<li><a href="<%= request.getContextPath() %>/manageOrderServlet">Order</a></li>
-					<li><a href="<%= request.getContextPath() %>/revenueServlet">Revenue</a></li>
-					<li><a href="authenticationServlet?action=LOGOUT">Logout</a></li>
+					<li><a href="<%= request.getContextPath() %>/restaurant/">Home</a></li>
+					<li><a href="<%= request.getContextPath() %>/restaurant/admin/manage-admin">Admin</a></li>
+					<li><a href="<%= request.getContextPath() %>/restaurant/category/manage-category">Category</a></li>
+					<li><a href="<%= request.getContextPath() %>/restaurant/food/manage-food">Food</a></li>
+					<li><a href="<%= request.getContextPath() %>/restaurant/order/manage-order">Order</a></li>
+					<li><a href="<%= request.getContextPath() %>/restaurant/revenue/">Revenue</a></li>
+					<li><a href="<%= request.getContextPath() %>/restaurant/admin/authentication?action=LOGOUT">Logout</a></li>
 				</ul>
 			</div>
 		</div>

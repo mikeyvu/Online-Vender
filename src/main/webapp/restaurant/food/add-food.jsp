@@ -8,7 +8,7 @@
 		<br> <br>
 		
 		<!-- Add Food Form Starts -->
-		<form action="<%= request.getContextPath() %>/addFoodServlet" 
+		<form action="<%= request.getContextPath() %>/restaurant/food/add-food" 
 		      method="POST" 
 		      enctype="multipart/form-data"
 		      onsubmit="return validateForm()">

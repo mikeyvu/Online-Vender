@@ -210,15 +210,15 @@
 <body>
     <header id="header" class="header d-flex align-items-center sticky-top">
         <div class="container position-relative d-flex align-items-center justify-content-between">
-            <a href="<%=request.getContextPath()%>/HomeServlet" class="logo d-flex align-items-center me-auto me-xl-0">
+            <a href="<%=request.getContextPath()%>/home" class="logo d-flex align-items-center me-auto me-xl-0">
                 <h1 class="sitename">Yummy</h1>
                 <span>.</span>
             </a>
             
             <nav id="navmenu" class="navmenu">
                 <ul>
-                    <li><a href="<%=request.getContextPath()%>/HomeServlet">Home</a></li>
-                    <li><a href="<%=request.getContextPath()%>/HomeServlet#menu">Menu</a></li>
+                    <li><a href="<%=request.getContextPath()%>/home">Home</a></li>
+                    <li><a href="<%=request.getContextPath()%>/home#menu">Menu</a></li>
                 </ul>
             </nav>
         </div>
@@ -299,7 +299,7 @@
                 <button class="btn-back" onclick="window.location.href='payment.jsp'">
                     <i class="bi bi-arrow-left"></i> Back to Payment
                 </button>
-                <a href="<%=request.getContextPath()%>/HomeServlet" class="btn-home">
+                <a href="<%=request.getContextPath()%>/home" class="btn-home">
                     <i class="bi bi-house"></i> Back to Home
                 </a>
             </div>

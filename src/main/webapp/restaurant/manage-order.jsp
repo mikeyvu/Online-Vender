@@ -227,7 +227,7 @@
 			statusIndicator.className = 'status-indicator';
 			statusText.textContent = 'Connecting...';
 			
-			const sseUrl = '<%=request.getContextPath()%>/OrderNotificationServlet';
+			const sseUrl = '<%=request.getContextPath()%>/restaurant/order/order-notification';
 			console.log('Connecting to SSE URL:', sseUrl);
 			
 			eventSource = new EventSource(sseUrl);
@@ -426,7 +426,7 @@
 			formData.append('orderId', orderId);
 			formData.append('status', newStatus);
 			
-			fetch('<%=request.getContextPath()%>/manageOrderServlet', {
+			fetch('<%=request.getContextPath()%>/restaurant/order/manage-order', {
 				// catch html instead of json
 				method: 'POST',
 				body: formData

@@ -86,22 +86,22 @@
         <div class="quick-actions" style="margin-bottom: 30px;">
             <h2>Quick Actions</h2>
             <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                <a href="<%= request.getContextPath() %>/revenueServlet" 
+                <a href="<%= request.getContextPath() %>/restaurant/revenue/" 
                    style="background: #28a745; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; display: flex; align-items: center; gap: 8px; transition: transform 0.2s;">
                     <i class="fas fa-chart-bar"></i>
                     View Revenue Report
                 </a>
-                <a href="<%= request.getContextPath() %>/manageOrderServlet" 
+                <a href="<%= request.getContextPath() %>/restaurant/order/manage-order" 
                    style="background: #007bff; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; display: flex; align-items: center; gap: 8px; transition: transform 0.2s;">
                     <i class="fas fa-list-alt"></i>
                     Manage Orders
                 </a>
-                <a href="<%= request.getContextPath() %>/manageFoodServlet" 
+                <a href="<%= request.getContextPath() %>/restaurant/food/manage-food" 
                    style="background: #6f42c1; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; display: flex; align-items: center; gap: 8px; transition: transform 0.2s;">
                     <i class="fas fa-utensils"></i>
                     Manage Menu
                 </a>
-                <a href="<%= request.getContextPath() %>/manageCategoryServlet" 
+                <a href="<%= request.getContextPath() %>/restaurant/category/manage-category" 
                    style="background: #fd7e14; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; display: flex; align-items: center; gap: 8px; transition: transform 0.2s;">
                     <i class="fas fa-tags"></i>
                     Manage Categories
@@ -145,8 +145,8 @@
                                             </span>
                                         </td>
                                         <td style="padding: 15px;">
-                                            <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate"/>
-                                            <fmt:formatDate value="${parsedDate}" pattern="MMM dd, HH:mm"/>
+                                            <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDate"/>
+                                            <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         </td>
                                         <td style="padding: 15px; text-align: right; font-weight: bold; color: #28a745;">
                                             $<fmt:formatNumber value="${order.total}" pattern="#,##0.00"/>

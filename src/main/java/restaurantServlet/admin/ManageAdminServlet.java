@@ -36,7 +36,7 @@ public class ManageAdminServlet extends HttpServlet {
 		Admin admin = (Admin) session.getAttribute("admin");
 		
 		if (admin == null) {
-			response.sendRedirect(request.getContextPath() + "/authenticationServlet");
+			response.sendRedirect(request.getContextPath() + "/restaurant/admin/authentication");
 			return;
 		}
 		
@@ -78,7 +78,7 @@ public class ManageAdminServlet extends HttpServlet {
 		String IDdelete = request.getParameter("id");
 		adminDAO.deleteAdmin(IDdelete);
 		
-		response.sendRedirect(request.getContextPath() + "/manage_admin?message=Admin Deleted Successfully");
+		response.sendRedirect(request.getContextPath() + "/restaurant/admin/manage-admin?message=Admin Deleted Successfully");
 	}
 	
 	private String passwordChangeMessage(String status) {

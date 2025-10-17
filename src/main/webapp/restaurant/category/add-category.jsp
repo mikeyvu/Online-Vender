@@ -15,7 +15,7 @@
 		</c:if>
 
 		<!-- Add Category Form Starts -->
-		<form action="<%= request.getContextPath() %>/addCategoryServlet" 
+		<form action="<%= request.getContextPath() %>/restaurant/category/add-category" 
 			  method="POST" 
 			  enctype="multipart/form-data" 
 			  onsubmit="return validateForm()">

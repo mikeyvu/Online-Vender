@@ -11,6 +11,7 @@
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
   
+  <!-- client side servlets -->
   <servlet>
     <servlet-name>HomeServlet</servlet-name>
     <servlet-class>clientServlet.home.HomeServlet</servlet-class>
@@ -26,16 +27,17 @@
 	</servlet>
   <servlet-mapping>
 	    <servlet-name>OrderServlet</servlet-name>
-	    <url-pattern>/client/order</url-pattern>  <!-- Maps to root URL -->
+	    <url-pattern>/client/order</url-pattern>  
   </servlet-mapping>
   
+  <!-- restaurant admin servlets -->
   <servlet>
     <servlet-name>AddAdminServlet</servlet-name>
     <servlet-class>restaurantServlet.admin.AddAdminServlet</servlet-class>
 	</servlet>
   <servlet-mapping>
 	    <servlet-name>AddAdminServlet</servlet-name>
-	    <url-pattern>/restaurant/admin/add-admin</url-pattern>  <!-- Maps to root URL -->
+	    <url-pattern>/restaurant/admin/add-admin</url-pattern>  
   </servlet-mapping>
   
   <servlet>
@@ -44,7 +46,7 @@
 	</servlet>
   <servlet-mapping>
 	    <servlet-name>ManageAdminServlet</servlet-name>
-	    <url-pattern>/restaurant/admin/manage-admin</url-pattern>  <!-- Maps to root URL -->
+	    <url-pattern>/restaurant/admin/manage-admin</url-pattern>  
   </servlet-mapping>
   
   <servlet>
@@ -53,7 +55,7 @@
 	</servlet>
   <servlet-mapping>
 	    <servlet-name>UpdateAdminServlet</servlet-name>
-	    <url-pattern>/restaurant/admin/update-admin</url-pattern>  <!-- Maps to root URL -->
+	    <url-pattern>/restaurant/admin/update-admin</url-pattern>  
   </servlet-mapping>
   
   <servlet>
@@ -62,7 +64,7 @@
 	</servlet>
   <servlet-mapping>
 	    <servlet-name>UpdatePasswordServlet</servlet-name>
-	    <url-pattern>/restaurant/admin/update-password</url-pattern>  <!-- Maps to root URL -->
+	    <url-pattern>/restaurant/admin/update-password</url-pattern> 
   </servlet-mapping>
   
   <servlet>
@@ -71,24 +73,101 @@
 	</servlet>
   <servlet-mapping>
 	    <servlet-name>AuthenticationServlet</servlet-name>
-	    <url-pattern>/restaurant/admin/authentication</url-pattern>  <!-- Maps to root URL -->
+	    <url-pattern>/restaurant/admin/authentication</url-pattern>  
   </servlet-mapping>
   
+  <!-- restaurant category servlets -->
   <servlet>
     <servlet-name>AddCategoryServlet</servlet-name>
     <servlet-class>restaurantServlet.category.AddCategoryServlet</servlet-class>
 	</servlet>
   <servlet-mapping>
 	    <servlet-name>AddCategoryServlet</servlet-name>
-	    <url-pattern>/restaurant/add-category</url-pattern>  <!-- Maps to root URL -->
+	    <url-pattern>/restaurant/category/add-category</url-pattern>  
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>ManageCategoryServlet</servlet-name>
+    <servlet-class>restaurantServlet.category.ManageCategoryServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>ManageCategoryServlet</servlet-name>
+	    <url-pattern>/restaurant/category/manage-category</url-pattern>  
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>UpdateCategoryServlet</servlet-name>
+    <servlet-class>restaurantServlet.category.UpdateCategoryServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>UpdateCategoryServlet</servlet-name>
+	    <url-pattern>/restaurant/category/update-category</url-pattern>  
+  </servlet-mapping>
+  
+  <!-- restaurant dashboard servlet -->
+  <servlet>
+    <servlet-name>DashboardServlet</servlet-name>
+    <servlet-class>restaurantServlet.dashboard.DashboardServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>DashboardServlet</servlet-name>
+	    <url-pattern>/restaurant/</url-pattern>  
+  </servlet-mapping>
+  
+  <!-- restaurant food servlets -->
   <servlet>
     <servlet-name>ManageFoodServlet</servlet-name>
     <servlet-class>restaurantServlet.food.ManageFoodServlet</servlet-class>
 	</servlet>
   <servlet-mapping>
 	    <servlet-name>ManageFoodServlet</servlet-name>
-	    <url-pattern>/restaurant/food/manage-food</url-pattern>  <!-- Maps to root URL -->
+	    <url-pattern>/restaurant/food/manage-food</url-pattern> 
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>AddFoodServlet</servlet-name>
+    <servlet-class>restaurantServlet.food.AddFoodServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>AddFoodServlet</servlet-name>
+	    <url-pattern>/restaurant/food/add-food</url-pattern> 
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>UpdateFoodServlet</servlet-name>
+    <servlet-class>restaurantServlet.food.UpdateFoodServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>UpdateFoodServlet</servlet-name>
+	    <url-pattern>/restaurant/food/update-food</url-pattern>  
+  </servlet-mapping>
+  
+  <!-- restaurant order servlets -->
+  <servlet>
+    <servlet-name>ManageOrderServlet</servlet-name>
+    <servlet-class>restaurantServlet.order.ManageOrderServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>ManageOrderServlet</servlet-name>
+	    <url-pattern>/restaurant/order/manage-order</url-pattern>  
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>OrderNotificationServlet</servlet-name>
+    <servlet-class>restaurantServlet.order.OrderNotificationServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>OrderNotificationServlet</servlet-name>
+	    <url-pattern>/restaurant/order/order-notification</url-pattern> 
+  </servlet-mapping>
+  
+  <!-- restaurant revenue servlets -->
+  <servlet>
+    <servlet-name>RevenueServlet</servlet-name>
+    <servlet-class>restaurantServlet.revenue.RevenueServlet</servlet-class>
+	</servlet>
+  <servlet-mapping>
+	    <servlet-name>RevenueServlet</servlet-name>
+	    <url-pattern>/restaurant/revenue/</url-pattern> 
   </servlet-mapping>
 </web-app>

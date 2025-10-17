@@ -10,7 +10,7 @@
 			<div>${message }</div>
 			<br><br>
             <!-- Button to Add Admin -->
-            <a href="<%= request.getContextPath() %>/add_admin" class="btn-primary">Add Admin</a>
+            <a href="<%= request.getContextPath() %>/restaurant/admin/add-admin" class="btn-primary">Add Admin</a>
             <br><br><br>
 
 			<table class="tbl-full">
@@ -28,9 +28,9 @@
                		<td>${a.fullName}</td>
                		<td>${a.username}</td>
                		<td>
-               			<a href="<%= request.getContextPath() %>/update_password?id=${a.id }" class="btn-primary">Change Password</a>
-                        <a href="<%= request.getContextPath() %>/update_admin?id=${a.id }" class="btn-secondary">Update Admin</a>
-                        <a href="<%= request.getContextPath() %>/manage_admin?action=DELETE&id=${a.id}" class="btn-danger">Delete Admin</a>
+               			<a href="<%= request.getContextPath() %>/restaurant/admin/update-password?id=${a.id }" class="btn-primary">Change Password</a>
+                        <a href="<%= request.getContextPath() %>/restaurant/admin/update-admin?id=${a.id }" class="btn-secondary">Update Admin</a>
+                        <a href="<%= request.getContextPath() %>/restaurant/admin/manage-admin?action=DELETE&id=${a.id}" class="btn-danger">Delete Admin</a>
                     </td>
                 </tr>
                 <c:set var="sn" value="${sn + 1}" />

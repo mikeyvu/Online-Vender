@@ -18,15 +18,14 @@ import entity.Category;
 /**
  * Servlet implementation class updateCategoryServlet
  */
-@WebServlet("/updateCategoryServlet")
 @MultipartConfig
-public class updateCategoryServlet extends HttpServlet {
+public class UpdateCategoryServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public updateCategoryServlet() {
+    public UpdateCategoryServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -94,7 +93,7 @@ public class updateCategoryServlet extends HttpServlet {
 	        categoryDAO.updateCategory(id, title.trim(), featured, active);
 
 	        // Redirect back to manage page with a success message
-	        response.sendRedirect(request.getContextPath() + "/manageCategoryServlet?message=Category Updated Successfully");
+	        response.sendRedirect(request.getContextPath() + "/restaurant/category/manage-category?message=Category Updated Successfully");
 	    }
 	}
 

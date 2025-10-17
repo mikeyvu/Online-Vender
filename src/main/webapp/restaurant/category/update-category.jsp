@@ -6,7 +6,7 @@
         <h1>Update Category</h1>
         <br><br>
 
-        <form action="<%= request.getContextPath() %>/updateCategoryServlet" 
+        <form action="<%= request.getContextPath() %>/restaurant/category/update-category" 
 		      method="POST" 
 		      enctype="multipart/form-data" 
 		      onsubmit="return validateForm()">

@@ -11,7 +11,7 @@
         
         <!-- Date Selector -->
         <div class="date-selector" style="margin: 20px 0; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-            <form method="GET" action="<%= request.getContextPath() %>/revenueServlet" style="display: flex; align-items: center; gap: 10px;">
+            <form method="GET" action="<%= request.getContextPath() %>/restaurant/revenue/" style="display: flex; align-items: center; gap: 10px;">
                 <label for="date" style="font-weight: bold;">Select Date:</label>
                 <input type="date" id="date" name="date" value="<fmt:formatDate value='${selectedDate}' pattern='yyyy-MM-dd'/>" 
                        style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">

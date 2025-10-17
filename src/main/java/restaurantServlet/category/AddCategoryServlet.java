@@ -37,7 +37,7 @@ public class AddCategoryServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("restaurant/category/add-category.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("/restaurant/category/add-category.jsp");
 		rd.forward(request, response);
 	}
 
@@ -55,7 +55,7 @@ public class AddCategoryServlet extends HttpServlet {
 			CategoryDAO dao = CategoryDAO.getInstance();
 			dao.addCategory(category);
 			
-			response.sendRedirect(request.getContextPath() + "/manageCategoryServlet");
+			response.sendRedirect(request.getContextPath() + "/restaurant/category/manage-category");
 		}
 	}
 }

@@ -17,7 +17,7 @@
 			<br> <br>
 			
 			<!-- Login form starts here -->
-			<form action="<%= request.getContextPath() %>/authenticationServlet" method="POST" class="text-center">
+			<form action="<%= request.getContextPath() %>/restaurant/admin/authentication" method="POST" class="text-center">
 				
 				Username: <br>
 				<input type="text" name="username" placeholder="Enter Username: "> <br> <br>
