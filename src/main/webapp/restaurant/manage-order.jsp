@@ -421,15 +421,17 @@
 				}
 			}
 			
-			const formData = new FormData();
-			formData.append('action', 'update_status');
-			formData.append('orderId', orderId);
-			formData.append('status', newStatus);
-			
+			const params = new URLSearchParams();
+			params.append('action', 'update_status');
+			params.append('orderId', orderId);
+			params.append('status', newStatus);
+
 			fetch('<%=request.getContextPath()%>/restaurant/order/manage-order', {
-				// catch html instead of json
-				method: 'POST',
-				body: formData
+			    method: 'POST',
+			    headers: {
+			        'Content-Type': 'application/x-www-form-urlencoded',
+			    },
+			    body: params
 			})
 			.then(response => {
 				// Log the full raw response

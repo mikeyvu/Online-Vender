@@ -2,6 +2,7 @@ package restaurantServlet.order;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -41,11 +42,27 @@ public class ManageOrderServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String action = request.getParameter("action");
+		System.out.println("=== ManageOrderServlet doPost() called ===");
+	    System.out.println("Content-Type: " + request.getContentType());
+	    System.out.println("Content-Length: " + request.getContentLength());
+	    System.out.println("Request Method: " + request.getMethod());
+	    
+		// Log all request parameters
+	    System.out.println("All request parameters:");
+	    request.getParameterMap().forEach((key, values) -> {
+	        System.out.println("  " + key + " = " + Arrays.toString(values));
+	    });
+	    
+	    String action = request.getParameter("action");
+	    System.out.println("Action parameter: '" + action + "'");
+	    System.out.println("Action is null: " + (action == null));
 		
 		if ("update_status".equals(action)) {
+			System.out.println("Received update_status request");
 			updateOrderStatus(request, response);
 		} else {
+			System.out.println(action);
+			System.out.println("Did not receive update_status request, redirect to doGet method and dispatch to jsp file");
 			// Default to GET behavior for unknown actions
 			doGet(request, response);
 		}
