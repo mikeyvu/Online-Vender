@@ -204,6 +204,49 @@ public class OrderDAO {
             }
         }
     }
+    
+    public Order getOrderById(int orderId) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            conn = DBUtils.makeConnection();
+            String sql = "SELECT * FROM `order` WHERE id = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, orderId);
+            rs = stmt.executeQuery();
+            
+            if (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("id"));
+                order.setTotal(rs.getDouble("total"));
+                order.setStatus(rs.getString("status"));
+                order.setOrderDate(rs.getString("order_date"));
+                order.setTableId(rs.getInt("table_id"));
+                
+                // Get order items for this order
+                List<OrderItem> orderItems = orderItemDAO.getOrderItemsByOrderId(order.getId());
+                order.setOrderItems(orderItems);
+                
+                return order;
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("Error retrieving order by ID: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return null;
+    }
 
     // Revenue calculation methods
     public double getDailyRevenue() {
@@ -217,9 +260,22 @@ public class OrderDAO {
 
         try {
             conn = DBUtils.makeConnection();
-            String sql = "SELECT SUM(total) as daily_revenue FROM `order` WHERE status = 'completed' AND DATE(order_date) = ?";
+
+            // Build half-open range [startOfDay, nextDay) to avoid DATE() on column and ensure correct day boundary
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+            cal.set(java.util.Calendar.MINUTE, 0);
+            cal.set(java.util.Calendar.SECOND, 0);
+            cal.set(java.util.Calendar.MILLISECOND, 0);
+            java.sql.Timestamp startOfDay = new java.sql.Timestamp(cal.getTimeInMillis());
+            cal.add(java.util.Calendar.DATE, 1);
+            java.sql.Timestamp nextDay = new java.sql.Timestamp(cal.getTimeInMillis());
+
+            String sql = "SELECT SUM(total) as daily_revenue FROM `order` WHERE status = 'completed' AND order_date >= ? AND order_date < ?";
             stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, date);
+            stmt.setTimestamp(1, startOfDay);
+            stmt.setTimestamp(2, nextDay);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -228,6 +284,40 @@ public class OrderDAO {
 
         } catch (SQLException e) {
             System.err.println("Error calculating daily revenue: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return 0.0;
+    }
+
+    // Overload accepting explicit range for reuse if needed
+    public double getRevenueForDateRange(java.sql.Timestamp startInclusive, java.sql.Timestamp endExclusive) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.makeConnection();
+            String sql = "SELECT SUM(total) as daily_revenue FROM `order` WHERE status = 'completed' AND order_date >= ? AND order_date < ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setTimestamp(1, startInclusive);
+            stmt.setTimestamp(2, endExclusive);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("daily_revenue");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error calculating revenue for range: " + e.getMessage());
             e.printStackTrace();
         } finally {
             try {
@@ -272,6 +362,39 @@ public class OrderDAO {
 
         return 0.0;
     }
+    
+    public double getRevenueForMonth(java.sql.Date date) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.makeConnection();
+            String sql = "SELECT SUM(total) as monthly_revenue FROM `order` WHERE status = 'completed' AND MONTH(order_date) = MONTH(?) AND YEAR(order_date) = YEAR(?)";
+            stmt = conn.prepareStatement(sql);
+            stmt.setDate(1, date);
+            stmt.setDate(2, date);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("monthly_revenue");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error calculating monthly revenue for date: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return 0.0;
+    }
 
     public int getDailyCompletedOrders() {
         return getCompletedOrdersCountForDate(new java.sql.Date(System.currentTimeMillis()));
@@ -284,9 +407,21 @@ public class OrderDAO {
 
         try {
             conn = DBUtils.makeConnection();
-            String sql = "SELECT COUNT(*) as completed_orders FROM `order` WHERE status = 'completed' AND DATE(order_date) = ?";
+
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+            cal.set(java.util.Calendar.MINUTE, 0);
+            cal.set(java.util.Calendar.SECOND, 0);
+            cal.set(java.util.Calendar.MILLISECOND, 0);
+            java.sql.Timestamp startOfDay = new java.sql.Timestamp(cal.getTimeInMillis());
+            cal.add(java.util.Calendar.DATE, 1);
+            java.sql.Timestamp nextDay = new java.sql.Timestamp(cal.getTimeInMillis());
+
+            String sql = "SELECT COUNT(*) as completed_orders FROM `order` WHERE status = 'completed' AND order_date >= ? AND order_date < ?";
             stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, date);
+            stmt.setTimestamp(1, startOfDay);
+            stmt.setTimestamp(2, nextDay);
             rs = stmt.executeQuery();
 
             if (rs.next()) {
@@ -309,6 +444,40 @@ public class OrderDAO {
         return 0;
     }
 
+    // Overload accepting explicit range for reuse if needed
+    public int getCompletedOrdersCountForRange(java.sql.Timestamp startInclusive, java.sql.Timestamp endExclusive) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.makeConnection();
+            String sql = "SELECT COUNT(*) as completed_orders FROM `order` WHERE status = 'completed' AND order_date >= ? AND order_date < ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setTimestamp(1, startInclusive);
+            stmt.setTimestamp(2, endExclusive);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("completed_orders");
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error counting completed orders for range: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return 0;
+    }
+
     public List<Order> getCompletedOrdersListForDate(java.sql.Date date) {
         List<Order> orders = new ArrayList<>();
         Connection conn = null;
@@ -317,9 +486,24 @@ public class OrderDAO {
 
         try {
             conn = DBUtils.makeConnection();
-            String sql = "SELECT * FROM `order` WHERE status = 'completed' AND DATE(order_date) = ? ORDER BY order_date DESC";
+
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setTime(date);
+            cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+            cal.set(java.util.Calendar.MINUTE, 0);
+            cal.set(java.util.Calendar.SECOND, 0);
+            cal.set(java.util.Calendar.MILLISECOND, 0);
+            java.sql.Timestamp startOfDay = new java.sql.Timestamp(cal.getTimeInMillis());
+            cal.add(java.util.Calendar.DATE, 1);
+            java.sql.Timestamp nextDay = new java.sql.Timestamp(cal.getTimeInMillis());
+
+            String sql = "SELECT * FROM `order` WHERE status = 'completed' AND order_date >= ? AND order_date < ? ORDER BY order_date DESC";
             stmt = conn.prepareStatement(sql);
-            stmt.setDate(1, date);
+            stmt.setTimestamp(1, startOfDay);
+            stmt.setTimestamp(2, nextDay);
+
+            System.out.println("OrderDAO.getCompletedOrdersListForDate: Querying for range [" + startOfDay + ", " + nextDay + ")");
+
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -330,6 +514,8 @@ public class OrderDAO {
                 order.setOrderDate(rs.getString("order_date"));
                 order.setTableId(rs.getInt("table_id"));
 
+                System.out.println("OrderDAO: Found order #" + order.getId() + " with date: " + order.getOrderDate());
+
                 // Get order items for this order
                 List<OrderItem> orderItems = orderItemDAO.getOrderItemsByOrderId(order.getId());
                 order.setOrderItems(orderItems);
@@ -337,8 +523,58 @@ public class OrderDAO {
                 orders.add(order);
             }
 
+            System.out.println("OrderDAO: Total orders found in range: " + orders.size());
+
         } catch (SQLException e) {
             System.err.println("Error retrieving completed orders for date: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return orders;
+    }
+
+    // Overload accepting explicit range for reuse if needed
+    public List<Order> getCompletedOrdersListForRange(java.sql.Timestamp startInclusive, java.sql.Timestamp endExclusive) {
+        List<Order> orders = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = DBUtils.makeConnection();
+            String sql = "SELECT * FROM `order` WHERE status = 'completed' AND order_date >= ? AND order_date < ? ORDER BY order_date DESC";
+            stmt = conn.prepareStatement(sql);
+            stmt.setTimestamp(1, startInclusive);
+            stmt.setTimestamp(2, endExclusive);
+
+            System.out.println("OrderDAO.getCompletedOrdersListForRange: Querying for range [" + startInclusive + ", " + endExclusive + ")");
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setId(rs.getInt("id"));
+                order.setTotal(rs.getDouble("total"));
+                order.setStatus(rs.getString("status"));
+                order.setOrderDate(rs.getString("order_date"));
+                order.setTableId(rs.getInt("table_id"));
+
+                List<OrderItem> orderItems = orderItemDAO.getOrderItemsByOrderId(order.getId());
+                order.setOrderItems(orderItems);
+
+                orders.add(order);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error retrieving completed orders for range: " + e.getMessage());
             e.printStackTrace();
         } finally {
             try {

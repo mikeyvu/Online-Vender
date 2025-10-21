@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="../../assets/img/favicon.png" rel="icon">
+    <link href="../../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -19,12 +19,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     
     <!-- Main CSS File -->
-    <link href="assets/css/main.css" rel="stylesheet">
-    <link href="assets/css/cart.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <link href="../../assets/css/cart.css" rel="stylesheet">
 </head>
 
 <body>
@@ -63,7 +63,7 @@
                 <button id="add-items-button" onclick="window.location.href='<%=request.getContextPath()%>/home'">
                     <i class="bi bi-arrow-left"></i> Add More Items
                 </button>
-                <button id="order-button" onclick="window.location.href='order-summary.jsp'">
+                <button id="order-button" onclick="window.location.href='<%=request.getContextPath()%>/client/order/order-summary.jsp'">
                     Place Order <i class="bi bi-arrow-right"></i>
                 </button>
             </div>
@@ -71,9 +71,9 @@
     </main>
 
     <!-- Vendor JS Files -->
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/payment.js"></script>
+    <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/payment.js"></script>
     
     <script>
         // Shopping cart functionality
@@ -112,7 +112,7 @@
                 
                 itemElement.innerHTML = 
                     '<div class="cart-item-content">' +
-                        '<img src="assets/img/food/' + (item.imageName || 'menu-item-1.png') + '" alt="' + item.name + '" class="cart-item-image">' +
+                        '<img src="../../assets/img/food/' + (item.imageName || 'menu-item-1.png') + '" alt="' + item.name + '" class="cart-item-image">' +
                         '<div class="cart-item-details">' +
                             '<p class="item-description">' + (item.ingredients || '') + '</p>' +
                             '<div class="item-info">' +

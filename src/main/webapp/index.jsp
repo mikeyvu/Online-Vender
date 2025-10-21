@@ -71,7 +71,7 @@ if (request.getAttribute("menuItems") == null) {
 			</nav>
 
 			<!-- Shopping Cart Icon -->
-			<a href="shopping_cart.jsp" class="btn btn-outline-primary ms-3"
+			<a href="<%=request.getContextPath()%>/client/shopping-cart/shopping_cart.jsp" class="btn btn-outline-primary ms-3"
 				id="cart-button"> <i class="bi bi-cart-fill"></i> <span
 				class="cart-count badge bg-danger">0</span>
 			</a>

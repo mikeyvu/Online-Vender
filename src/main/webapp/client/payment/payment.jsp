@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
     <!-- Favicons -->
-    <link href="assets/img/favicon.png" rel="icon">
-    <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <link href="../../assets/img/favicon.png" rel="icon">
+    <link href="../../assets/img/apple-touch-icon.png" rel="apple-touch-icon">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -19,12 +19,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Amatic+SC:wght@400;700&display=swap" rel="stylesheet">
     
     <!-- Vendor CSS Files -->
-    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="../../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     
     <!-- Main CSS File -->
-    <link href="assets/css/main.css" rel="stylesheet">
-    <link href="assets/css/payment.css" rel="stylesheet">
+    <link href="../../assets/css/main.css" rel="stylesheet">
+    <link href="../../assets/css/payment.css" rel="stylesheet">
 </head>
 
 <body>
@@ -72,7 +72,7 @@
                             </div>
                         </div>
                         <div class="payment-actions">
-                            <button type="button" class="btn-back" onclick="window.location.href='order-summary.jsp'">
+                            <button type="button" class="btn-back" onclick="window.location.href='<%=request.getContextPath()%>/client/order/order-summary.jsp'">
                                 <i class="bi bi-arrow-left"></i> Back to Order Summary
                             </button>
                             <button type="button" class="btn-proceed" id="proceed-btn" onclick="proceedToPayment()" disabled>
@@ -86,9 +86,9 @@
     </main>
 
     <!-- Vendor JS Files -->
-    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/payment.js"></script>
+    <script src="../../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/payment.js"></script>
     
     <script>
         let selectedPaymentMethod = null;
@@ -114,7 +114,7 @@
             createOrderAndProceed();
         }
         
-        function createOrderAndProceed() {
+        async function createOrderAndProceed() {
             const cart = JSON.parse(localStorage.getItem('shoppingCart')) || [];
             
             // Validate cart
@@ -137,33 +137,32 @@
             };
             
             console.log('Order data to send:', orderData);
-            console.log('Total items to send:', cart.length);
             
-            // Submit order
-            console.log('Submitting order to:', '<%=request.getContextPath()%>/client/order');
-            console.log('Payment method:', selectedPaymentMethod);
-            console.log('Cart items:', cart);
+            // Disable the proceed button to prevent double submission
+            const proceedBtn = document.getElementById('proceed-btn');
+            proceedBtn.disabled = true;
+            proceedBtn.textContent = 'Processing...';
             
-            fetch('<%=request.getContextPath()%>/client/order', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(orderData)
-            })
-            .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response ok:', response.ok);
+            try {
+                // Send order via AJAX using fetch
+                const response = await fetch('<%=request.getContextPath()%>/client/order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(orderData)
+                });
                 
-                if (response.ok) {
-                    console.log('Order created successfully, clearing cart and redirecting...');
-                    
-                    // Clear the shopping cart immediately after successful order
+                const result = await response.json();
+                console.log('Order response:', result);
+                
+                if (result.success) {
+                    // Clear the shopping cart after successful order
                     if (typeof clearShoppingCart === 'function') {
                         clearShoppingCart();
                     } else {
                         localStorage.removeItem('shoppingCart');
-                        console.log('Shopping cart cleared after successful order placement');
+                        console.log('Shopping cart cleared after order submission');
                         
                         // Update cart count in header if it exists
                         const cartCountElement = document.querySelector('.cart-count');
@@ -172,26 +171,20 @@
                         }
                     }
                     
-                    // Navigate based on selected payment method
-                    if (selectedPaymentMethod === 'transfer') {
-                        window.location.href = 'transfer-payment.jsp';
-                    } else if (selectedPaymentMethod === 'cash') {
-                        window.location.href = 'cash-payment.jsp';
-                    } else {
-                        window.location.href = 'order-confirmation.jsp';
-                    }
+                    // Redirect to the appropriate page based on the response
+                    console.log('Redirecting to:', result.redirectUrl);
+                    window.location.href = result.redirectUrl;
                 } else {
-                    console.error('Order creation failed with status:', response.status);
-                    response.text().then(text => {
-                        console.error('Error response:', text);
-                        alert('Failed to create order. Please try again. Status: ' + response.status);
-                    });
+                    alert('Failed to create order: ' + (result.error || 'Unknown error'));
+                    proceedBtn.disabled = false;
+                    proceedBtn.innerHTML = 'Proceed <i class="bi bi-arrow-right"></i>';
                 }
-            })
-            .catch(error => {
-                console.error('Error creating order:', error);
-                alert('Error creating order. Please try again.');
-            });
+            } catch (error) {
+                console.error('Error submitting order:', error);
+                alert('An error occurred while processing your order. Please try again.');
+                proceedBtn.disabled = false;
+                proceedBtn.innerHTML = 'Proceed <i class="bi bi-arrow-right"></i>';
+            }
         }
     </script>
 </body>

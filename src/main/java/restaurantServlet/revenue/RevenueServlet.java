@@ -35,7 +35,10 @@ public class RevenueServlet extends HttpServlet {
         if (dateParam != null && !dateParam.trim().isEmpty()) {
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                selectedDate = new Date(sdf.parse(dateParam).getTime());
+                sdf.setLenient(false);
+                // Parse and normalize to avoid timezone issues
+                java.util.Date parsedDate = sdf.parse(dateParam);
+                selectedDate = new Date(parsedDate.getTime());
             } catch (ParseException e) {
                 System.err.println("Invalid date format: " + dateParam);
                 selectedDate = new Date(System.currentTimeMillis());
@@ -43,12 +46,16 @@ public class RevenueServlet extends HttpServlet {
         } else {
             selectedDate = new Date(System.currentTimeMillis());
         }
+        
+        System.out.println("RevenueServlet: Selected date = " + selectedDate);
 
         // Calculate revenue metrics
         double dailyRevenue = orderDAO.getRevenueForDate(selectedDate);
-        double monthlyRevenue = orderDAO.getMonthlyRevenue();
+        double monthlyRevenue = orderDAO.getRevenueForMonth(selectedDate);
         int dailyCompletedOrders = orderDAO.getCompletedOrdersCountForDate(selectedDate);
         List<Order> completedOrders = orderDAO.getCompletedOrdersListForDate(selectedDate);
+        
+        System.out.println("RevenueServlet: Found " + completedOrders.size() + " completed orders for " + selectedDate);
 
         // Set attributes for JSP
         request.setAttribute("selectedDate", selectedDate);

@@ -31,16 +31,24 @@ public class OrderServlet extends HttpServlet {
         System.out.println("OrderServlet: Received POST request");
         
         try {
-            // Read JSON data from request body
-            StringBuilder jsonBuffer = new StringBuilder();
-            BufferedReader reader = request.getReader();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonBuffer.append(line);
-            }
+            String jsonData;
             
-            String jsonData = jsonBuffer.toString();
-            System.out.println("OrderServlet: Received JSON data: " + jsonData);
+            // Check if it's form data or JSON data
+            if (request.getContentType() != null && request.getContentType().contains("application/x-www-form-urlencoded")) {
+                // Form data submission
+                jsonData = request.getParameter("orderData");
+                System.out.println("OrderServlet: Received form data: " + jsonData);
+            } else {
+                // JSON data submission
+                StringBuilder jsonBuffer = new StringBuilder();
+                BufferedReader reader = request.getReader();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    jsonBuffer.append(line);
+                }
+                jsonData = jsonBuffer.toString();
+                System.out.println("OrderServlet: Received JSON data: " + jsonData);
+            }
             
             // Simple JSON parsing (without external libraries)
             String paymentMethod = extractJsonValue(jsonData, "paymentMethod");
@@ -95,22 +103,37 @@ public class OrderServlet extends HttpServlet {
                     e.printStackTrace();
                 }
                 
-                // Redirect based on payment method
+                // Return JSON response with redirect URL based on payment method
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                String redirectUrl;
                 if ("transfer".equals(paymentMethod)) {
-                    response.sendRedirect("transfer-payment.jsp");
+                    redirectUrl = request.getContextPath() + "/client/payment/transfer-payment.jsp";
                 } else if ("cash".equals(paymentMethod)) {
-                    response.sendRedirect("cash-payment.jsp");
+                    redirectUrl = request.getContextPath() + "/client/payment/cash-payment.jsp";
                 } else {
-                    response.sendRedirect("order-confirmation.jsp");
+                    redirectUrl = request.getContextPath() + "/client/order/order-confirmation.jsp";
                 }
+                
+                String jsonResponse = "{\"success\": true, \"orderId\": " + orderId + ", \"redirectUrl\": \"" + redirectUrl + "\"}";
+                response.getWriter().write(jsonResponse);
+                System.out.println("OrderServlet: Sent JSON response: " + jsonResponse);
             } else {
                 System.out.println("OrderServlet: Order creation failed - orderId: " + orderId);
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create order");
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.setStatus(500);
+                response.getWriter().write("{\"success\": false, \"error\": \"Failed to create order\"}");
             }
             
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error processing order: " + e.getMessage());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(500);
+            String errorMsg = escapeJson(e.getMessage() != null ? e.getMessage() : "Unknown error");
+            response.getWriter().write("{\"success\": false, \"error\": \"Error processing order: " + errorMsg + "\"}");
         }
     }
     
@@ -208,5 +231,15 @@ public class OrderServlet extends HttpServlet {
             e.printStackTrace();
         }
         return items;
+    }
+    
+    // Helper method to escape JSON strings
+    private String escapeJson(String str) {
+        if (str == null) return "";
+        return str.replace("\\", "\\\\")
+                  .replace("\"", "\\\"")
+                  .replace("\n", "\\n")
+                  .replace("\r", "\\r")
+                  .replace("\t", "\\t");
     }
 }

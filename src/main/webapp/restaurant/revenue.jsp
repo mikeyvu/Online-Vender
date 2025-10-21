@@ -14,6 +14,7 @@
             <form method="GET" action="<%= request.getContextPath() %>/restaurant/revenue/" style="display: flex; align-items: center; gap: 10px;">
                 <label for="date" style="font-weight: bold;">Select Date:</label>
                 <input type="date" id="date" name="date" value="<fmt:formatDate value='${selectedDate}' pattern='yyyy-MM-dd'/>" 
+                       max="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>"
                        style="padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
                 <button type="submit" style="padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
                     View Revenue
@@ -26,7 +27,7 @@
             <div class="revenue-card" style="flex: 1; background: #28a745; color: white; padding: 30px; border-radius: 8px; text-align: center;">
                 <h2 style="margin: 0; font-size: 2.5em;">$<fmt:formatNumber value="${dailyRevenue}" pattern="#,##0.00"/></h2>
                 <p style="margin: 10px 0 0 0; font-size: 1.2em;">Daily Revenue</p>
-                <small><fmt:formatDate value="${selectedDate}" pattern="EEEE, MMMM dd, yyyy"/></small>
+                <small><fmt:formatDate value="${selectedDate}" pattern="EEEE, dd-MM-yyyy"/></small>
             </div>
             
             <div class="revenue-card" style="flex: 1; background: #007bff; color: white; padding: 30px; border-radius: 8px; text-align: center;">
@@ -38,13 +39,13 @@
             <div class="revenue-card" style="flex: 1; background: #ffc107; color: black; padding: 30px; border-radius: 8px; text-align: center;">
                 <h2 style="margin: 0; font-size: 2.5em;">${dailyCompletedOrders}</h2>
                 <p style="margin: 10px 0 0 0; font-size: 1.2em;">Completed Orders</p>
-                <small>Today</small>
+                <small><fmt:formatDate value="${selectedDate}" pattern="EEEE, dd-MM-yyyy"/></small>
             </div>
         </div>
 
         <!-- Completed Orders List -->
         <div class="completed-orders">
-            <h2>Completed Orders for <fmt:formatDate value="${selectedDate}" pattern="MMMM dd, yyyy"/></h2>
+            <h2>Completed Orders for <fmt:formatDate value="${selectedDate}" pattern="dd-MM-yyyy"/></h2>
             
             <c:choose>
                 <c:when test="${empty completedOrders}">
@@ -71,8 +72,8 @@
                                         <td style="padding: 15px; font-weight: bold;">#${order.id}</td>
                                         <td style="padding: 15px;">Table ${order.tableId}</td>
                                         <td style="padding: 15px;">
-                                            <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="parsedDate"/>
-                                            <fmt:formatDate value="${parsedDate}" pattern="HH:mm"/>
+                                            <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDate"/>
+                                            <fmt:formatDate value="${parsedDate}" pattern="HH:mm a"/>
                                         </td>
                                         <td style="padding: 15px;">
                                             <c:forEach var="item" items="${order.orderItems}" varStatus="status">

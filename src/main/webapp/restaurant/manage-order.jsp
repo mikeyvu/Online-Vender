@@ -317,13 +317,58 @@
 			}
 		}
 		
+		// Format date to dd-MM-yyyy HH:mm AM/PM with robust parsing
+		function formatOrderDate(dateString) {
+			if (!dateString || dateString === 'N/A') {
+				return '-';
+			}
+
+			let date;
+			try {
+				// If it's a numeric timestamp
+				if (typeof dateString === 'number') {
+					date = new Date(dateString);
+				} else if (/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}(?::\d{2})?$/.test(dateString)) {
+					// SQL datetime like "YYYY-MM-DD HH:mm:ss" (treat as local time)
+					const [dPart, tPart] = dateString.split(' ');
+					const [y, m, d] = dPart.split('-').map(Number);
+					const tSeg = tPart.split(':').map(Number);
+					const hh = tSeg[0] || 0;
+					const mm = tSeg[1] || 0;
+					const ss = tSeg[2] || 0;
+					date = new Date(y, (m - 1), d, hh, mm, ss, 0);
+				} else {
+					// Try ISO by replacing space with 'T' if present
+					const candidate = (typeof dateString === 'string' && dateString.indexOf(' ') > -1)
+						? dateString.replace(' ', 'T')
+						: dateString;
+					date = new Date(candidate);
+				}
+			} catch (e) {
+				console.warn('formatOrderDate: failed to parse date:', dateString, e);
+				return '-';
+			}
+
+			if (!(date instanceof Date) || isNaN(date.getTime())) {
+				return '-';
+			}
+
+			const day = String(date.getDate()).padStart(2, '0');
+			const month = String(date.getMonth() + 1).padStart(2, '0');
+			const year = date.getFullYear();
+			const hours24 = date.getHours();
+			const minutes = String(date.getMinutes()).padStart(2, '0');
+			const ampm = hours24 >= 12 ? 'PM' : 'AM';
+			const HH = String(hours24).padStart(2, '0');
+
+			return `${day}-${month}-${year} ${HH}:${minutes} ${ampm}`;
+		}
+		
 		// Create order card HTML
 		function createOrderCard(order) {
 			console.log('Creating order card for order ID:', order.id);
 			const statusClass = order.status.replace('_', '-');
-			const orderDate = order.orderDate && order.orderDate !== 'N/A' ? 
-				new Date(order.orderDate).toLocaleString() : 
-				new Date().toLocaleString();
+			const orderDate = formatOrderDate(order.orderDate);
 			
 			console.log('Order card data - ID:', order.id, 'Table:', order.tableId, 'Status:', order.status, 'Date:', orderDate);
 			
@@ -436,22 +481,18 @@
 			.then(response => {
 				// Log the full raw response
 				console.log("Raw response: ", response);
-				response.json();
+				return response.json();
 			}
 			)
 			.then(data => {
 				if (data.success) {
 					console.log('Order status updated successfully:', data.message);
 					
-					// Update local order status immediately for better UX
-					const orderIndex = orders.findIndex(order => order.id === orderId);
-					if (orderIndex !== -1) {
-						orders[orderIndex].status = newStatus;
-						renderOrders();
-					}
-					
 					// Show success message
 					showNotification(`Order #${orderId} status updated to ${newStatus}`, 'success');
+
+					//NOTE: No need to manually update and re-render order here
+					//The SSE 'order_update' message will trigger the update automatically
 				} else {
 					console.error('Failed to update order status:', data.message);
 					showNotification(`Failed to update order: ${data.message}`, 'error');

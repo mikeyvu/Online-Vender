@@ -146,7 +146,7 @@
                                         </td>
                                         <td style="padding: 15px;">
                                             <fmt:parseDate value="${order.orderDate}" pattern="yyyy-MM-dd HH:mm:ss" var="parsedDate"/>
-                                            <fmt:formatDate value="${parsedDate}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                            <fmt:formatDate value="${parsedDate}" pattern="dd-MM-yyyy HH:mm a"/>
                                         </td>
                                         <td style="padding: 15px; text-align: right; font-weight: bold; color: #28a745;">
                                             $<fmt:formatNumber value="${order.total}" pattern="#,##0.00"/>

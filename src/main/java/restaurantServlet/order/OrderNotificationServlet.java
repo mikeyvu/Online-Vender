@@ -68,7 +68,7 @@ public class OrderNotificationServlet extends HttpServlet {
     
     public static void notifyNewOrder(Order order) {
         System.out.println("OrderNotificationServlet: notifyNewOrder called for order ID: " + order.getId());
-        String jsonData = buildOrderJson(order);
+        String jsonData = buildOrderJson(order, "new_order");
         String message = "data: " + jsonData + "\n\n";
         
         System.out.println("OrderNotificationServlet: JSON data: " + jsonData);
@@ -94,7 +94,7 @@ public class OrderNotificationServlet extends HttpServlet {
     }
     
     public static void notifyOrderUpdate(Order order) {
-        String jsonData = buildOrderJson(order);
+        String jsonData = buildOrderJson(order, "order_update");
         String message = "data: " + jsonData + "\n\n";
         
         synchronized (clientsLock) {
@@ -127,10 +127,10 @@ public class OrderNotificationServlet extends HttpServlet {
         }
     }
     
-    private static String buildOrderJson(Order order) {
+    private static String buildOrderJson(Order order, String messageType) {
         StringBuilder json = new StringBuilder();
         json.append("{");
-        json.append("\"type\":\"new_order\",");
+        json.append("\"type\":\"").append(messageType).append("\",");
         json.append("\"order\":{");
         json.append("\"id\":").append(order.getId()).append(",");
         json.append("\"tableId\":").append(order.getTableId() != null ? order.getTableId() : 0).append(",");

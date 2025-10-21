@@ -102,13 +102,15 @@ public class ManageOrderServlet extends HttpServlet {
 				
 				// Notify all connected clients about the status update
 				try {
-					// Create a mock order object for notification
-					entity.Order order = new entity.Order();
-					order.setId(orderId);
-					order.setStatus(newStatus);
+					// Fetch the COMPLETE order object from database with all details
+					entity.Order order = orderDAO.getOrderById(orderId);
 					
-					// Send notification to all connected clients
-					OrderNotificationServlet.notifyOrderUpdate(order);
+					if (order != null) {
+						// Send notification to all connected clients with full order data
+						OrderNotificationServlet.notifyOrderUpdate(order);
+					} else {
+						System.err.println("Warning: Could not fetch order " + orderId + " for notification");
+					}
 				} catch (Exception e) {
 					System.err.println("Failed to notify clients about order update: " + e.getMessage());
 					// Don't fail the request if notification fails
