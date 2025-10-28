@@ -52,7 +52,11 @@
 					<td>
 						<select name="category" id="category">
 							<c:forEach var="c" items="${categories}">
-								<option value="${c.id }">${c.title }</option>
+								<option value="${c.id}"
+									<c:if test="${c.id eq foodUpdate.categoryID}">selected</c:if>
+								>
+									${c.title}
+								</option>
 							</c:forEach>
 						</select>
 					</td>
@@ -79,10 +83,10 @@
 				</tr>
 				
                 <tr>
-                    <td colspan="2">
+					<td colspan="2">
                     	<input type="hidden" name="current_image" value="${foodUpdate.imageName }">
                     	<input type="hidden" name="id" value="${foodUpdate.id }">
-                        <input type="submit" name="submit" value="Update Category" class="btn-secondary">
+			                <input type="submit" name="submit" value="Update Food" class="btn-secondary">
                     </td>
                 </tr>
             </table>

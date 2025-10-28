@@ -46,10 +46,11 @@ public class FoodDAO {
 				String description = resultSet.getString("description");
 				double price = resultSet.getDouble("price");
 				String imageName = resultSet.getString("image_name");
+				int categoryId = resultSet.getInt("category_id");
 				String featured = resultSet.getString("featured");
 				String active = resultSet.getString("active");
-				
-				foods.add(new Food(id, title, description, price, imageName, id, featured, active));
+                
+				foods.add(new Food(id, title, description, price, imageName, categoryId, featured, active));
 			}
 			
 			return foods;
@@ -92,10 +93,11 @@ public class FoodDAO {
 				String description = resultSet.getString("description");
 				double price = resultSet.getDouble("price");
 				String imageName = resultSet.getString("image_name");
+				int categoryId = resultSet.getInt("category_id");
 				String featured = resultSet.getString("featured");
 				String active = resultSet.getString("active");
-				
-				return new Food(id, title, description, price, imageName, id, featured, active);
+                
+				return new Food(id, title, description, price, imageName, categoryId, featured, active);
 			}
 			
 		} catch (Exception e ) {
@@ -136,10 +138,11 @@ public class FoodDAO {
 				String description = resultSet.getString("description");
 				double price = resultSet.getDouble("price");
 				String imageName = resultSet.getString("image_name");
+				int categoryId = resultSet.getInt("category_id");
 				String featured = resultSet.getString("featured");
 				String active = resultSet.getString("active");
-				
-				foods.add(new Food(id, title, description, price, imageName, id, featured, active));
+                
+				foods.add(new Food(id, title, description, price, imageName, categoryId, featured, active));
 			}
 			
 			return foods;

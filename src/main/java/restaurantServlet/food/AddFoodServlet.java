@@ -66,11 +66,10 @@ public class AddFoodServlet extends HttpServlet {
 			String originalFileName = filePart.getSubmittedFileName();
 			
 			String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-			String newFileName = title.strip() + fileExtension;
+			String newFileName = title.trim() + fileExtension;
 			
-			// Get the servlet context path and build the project path dynamically
-			String contextPath = getServletContext().getRealPath("/");
-			String uploadPath = contextPath + "assets\\img\\food";
+			// Use permanent storage location outside deployment directory
+			String uploadPath = "C:\\Users\\minhv\\Documents\\app-data\\online-vender\\assets\\img\\food";
 			
 			// Ensure the directory exists
 			File uploadDir = new File(uploadPath);

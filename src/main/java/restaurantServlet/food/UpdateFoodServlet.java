@@ -48,8 +48,9 @@ public class UpdateFoodServlet extends HttpServlet {
 		
 		request.setAttribute("foodUpdate", food);
 		
-		CategoryDAO categoryDAO = CategoryDAO.getInstance();
-		ArrayList<Category> categories = categoryDAO.getAllActiveCategories();
+	CategoryDAO categoryDAO = CategoryDAO.getInstance();
+	// Include all categories so the current one is selectable even if inactive
+	ArrayList<Category> categories = categoryDAO.getAll();
 		
 		request.setAttribute("categories", categories);
 		
@@ -76,9 +77,8 @@ public class UpdateFoodServlet extends HttpServlet {
 	        Part filePart = request.getPart("image");
 			String originalFileName = filePart.getSubmittedFileName();
 			
-			// Get the servlet context path and build the project path dynamically
-			String contextPath = getServletContext().getRealPath("/");
-			String uploadPath = contextPath + "assets\\img\\food";
+			// Use permanent storage location outside deployment directory
+			String uploadPath = "C:\\Users\\minhv\\Documents\\app-data\\online-vender\\assets\\img\\food";
 			
 			// Ensure the directory exists
 			File uploadDir = new File(uploadPath);
@@ -91,7 +91,7 @@ public class UpdateFoodServlet extends HttpServlet {
 			if (originalFileName != null && !originalFileName.isEmpty()) {
 				//If a new image is upload, change its name to sync the title
 				String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-				newImage = title.strip() + fileExtension;
+				newImage = title.trim() + fileExtension;
 				
 				// Delete the old image file
 	            String currentImage = request.getParameter("current_image");

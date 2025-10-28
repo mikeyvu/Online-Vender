@@ -264,28 +264,25 @@
 			};
 		}
 		
-		// Handle SSE messages
-		function handleSSEMessage(data) {
-			if (data.type === 'initial_orders') {
-				orders = data.orders || [];
-				console.log('Loaded initial orders:', orders.length);
+	// Handle SSE messages
+	function handleSSEMessage(data) {
+		if (data.type === 'initial_orders') {
+			orders = data.orders || [];
+			renderOrders();
+		} else if (data.type === 'new_order') {
+			console.log('New order received - Order #' + data.order.id + ' for Table ' + data.order.tableId);
+			orders.unshift(data.order);
+			renderOrders();
+		} else if (data.type === 'order_update') {
+			console.log('Order update received - Order #' + data.order.id + ' status: ' + data.order.status);
+			const orderIndex = orders.findIndex(order => order.id === data.order.id);
+			if (orderIndex !== -1) {
+				orders[orderIndex] = data.order;
 				renderOrders();
-			} else if (data.type === 'new_order') {
-				console.log('New order received - Order #' + data.order.id + ' for Table ' + data.order.tableId);
-				orders.unshift(data.order);
-				renderOrders();
-			} else if (data.type === 'order_update') {
-				console.log('Order update received - Order #' + data.order.id + ' status: ' + data.order.status);
-				const orderIndex = orders.findIndex(order => order.id === data.order.id);
-				if (orderIndex !== -1) {
-					orders[orderIndex] = data.order;
-					renderOrders();
-				}
 			}
-			// Ignore heartbeat messages
 		}
-		
-		// Render orders
+		// Ignore heartbeat messages
+	}		// Render orders
 		function renderOrders() {
 			const container = document.getElementById('orders-container');
 			
@@ -299,22 +296,8 @@
 				return;
 			}
 			
-			try {
-				console.log('About to render orders. Orders array:', orders);
-				const orderHTML = orders.map(order => createOrderCard(order)).join('');
-				console.log('Generated HTML length:', orderHTML.length);
-				console.log('First 500 characters of HTML:', orderHTML.substring(0, 500));
-				
-				container.innerHTML = orderHTML;
-				console.log('Orders rendered successfully - ' + orders.length + ' orders displayed');
-				console.log('Container innerHTML after rendering:', container.innerHTML.length + ' characters');
-				
-				// Force a reflow to make sure the container updates
-				container.offsetHeight;
-			} catch (error) {
-				console.error('Error rendering orders:', error);
-				console.error('Orders data:', orders);
-			}
+			const orderHTML = orders.map(order => createOrderCard(order)).join('');
+			container.innerHTML = orderHTML;
 		}
 		
 		// Format date to dd-MM-yyyy HH:mm AM/PM with robust parsing
@@ -361,22 +344,18 @@
 			const ampm = hours24 >= 12 ? 'PM' : 'AM';
 			const HH = String(hours24).padStart(2, '0');
 
-			return `${day}-${month}-${year} ${HH}:${minutes} ${ampm}`;
+			return day + '-' + month + '-' + year + ' ' + HH + ':' + minutes + ' ' + ampm;
+		}
 		}
 		
 		// Create order card HTML
 		function createOrderCard(order) {
-			console.log('Creating order card for order ID:', order.id);
 			const statusClass = order.status.replace('_', '-');
 			const orderDate = formatOrderDate(order.orderDate);
 			
-			console.log('Order card data - ID:', order.id, 'Table:', order.tableId, 'Status:', order.status, 'Date:', orderDate);
+			const actionsHtml = getOrderActions(order);
 			
-			try {
-				const actionsHtml = getOrderActions(order);
-				console.log('Actions HTML for order', order.id, ':', actionsHtml);
-				
-				const html = 
+			const html = 
 				'<div class="order-card" data-order-id="' + order.id + '">' +
 					'<div class="order-header">' +
 						'<div>' +
@@ -401,54 +380,39 @@
 						actionsHtml +
 					'</div>' +
 				'</div>';
-				
-				console.log('Generated HTML for order', order.id, ':', html.substring(0, 100) + '...');
-				return html;
-			} catch (error) {
-				console.error('Error creating order card for order', order.id, ':', error);
-				return '<div class="order-card error">Error displaying order #' + order.id + '</div>';
-			}
+			
+			return html;
 		}
 		
 		// Get order action buttons based on status
 		function getOrderActions(order) {
-			console.log('getOrderActions called for order ID:', order.id, 'status:', order.status);
 			
 			if (order.status === 'pending') {
-				const html = 
+				return 
 					'<button class="btn-action btn-confirm" onclick="updateOrder(' + order.id + ', \'confirmed\')">' +
 						'Confirm Order' +
 					'</button>' +
 					'<button class="btn-action btn-cancel" onclick="updateOrder(' + order.id + ', \'cancelled\')">' +
 						'Cancel Order' +
 					'</button>';
-				console.log('Returning pending actions HTML:', html);
-				return html;
 			} else if (order.status === 'confirmed') {
-				const html = 
+				return 
 					'<button class="btn-action btn-finish" onclick="updateOrder(' + order.id + ', \'completed\')">' +
 						'Complete' +
 					'</button>';
-				console.log('Returning confirmed actions HTML:', html);
-				return html;
 			} else if (order.status === 'completed') {
-				console.log('Returning completed actions HTML - no actions available');
 				return '<span style="color: #28a745; font-weight: bold;"><i class="bi bi-check-circle"></i> Order Completed</span>';
 			} else if (order.status === 'cancelled') {
-				console.log('Returning cancelled actions HTML - no actions available');
 				return '<span style="color: #dc3545; font-weight: bold;"><i class="bi bi-x-circle"></i> Order Cancelled</span>';
 			} else if (order.status === 'not_paid') {
-				const html = 
+				return 
 					'<button class="btn-action btn-confirm" onclick="updateOrder(' + order.id + ', \'confirmed\')">' +
 						'Confirm Order' +
 					'</button>' +
 					'<button class="btn-action btn-cancel" onclick="updateOrder(' + order.id + ', \'cancelled\')">' +
 						'Cancel Order' +
 					'</button>';
-				console.log('Returning not_paid actions HTML:', html);
-				return html;
 			} else {
-				console.log('Returning default no actions HTML for status:', order.status);
 				return '<span style="color: #666;">No actions available</span>';
 			}
 		}
